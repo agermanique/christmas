@@ -31,4 +31,4 @@ export const giftedList: Gifted[] = [
   new Gifted('Gordon', ''),
   new Gifted('Flo', 'Michette', true),
 ];
-export const charArray = ['a', 'b', 'c', 'd', 'e'];
+export const charArray = ['A', 'B', 'C', 'D', 'E'];

@@ -61,12 +61,12 @@ export class GiftsService {
     gifted.id = id.toString();
     return gifted;
   }
-  setFirstCharId(gifteds: Gifted[]) {
-    gifteds[0].id = charArray[charArray.length];
+  private setFirstCharId(gifteds: Gifted[]) {
+    gifteds[0].id = 'E';
     return gifteds
   }
-  setFirstId(gifteds: Gifted[]) {
-    gifteds[0].id = charArray.length.toString();
+  private setFirstId(gifteds: Gifted[]) {
+    gifteds[0].id = (24).toString();
     return gifteds
   }
   private concat(current, next) {
