@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
     if (this.isFirstRandom) {
       this.isFirstRandom = !this.isFirstRandom;
       this.giftedList = this.giftsService.randomize();
-      // this.giftsService.randomize();
     }
   }
 }

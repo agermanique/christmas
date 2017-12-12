@@ -10,56 +10,68 @@ import 'rxjs/add/observable/from';
 import { giftedList, charArray } from './gift.const';
 import { Gifted } from './gift.models';
 import { Observable } from 'rxjs/Observable';
+import { first } from 'rxjs/operators/first';
 
 @Injectable()
 export class GiftsService {
   // public giftedList$ = new BehaviorSubject(giftedList);
   public giftedList$: Observable<Gifted[]> = Observable.of([]);
-  giftsNgBe$ = Observable.from<Gifted[]>([giftedList]);
-  giftsOther$ = Observable.from<Gifted[]>([giftedList]);
-  temp1$;
-  temp2$;
+  private giftedListOriginal$: Observable<Gifted[]> = Observable.from<Gifted[]>([giftedList]);
+  private giftsNgBe$: Observable<Gifted[]>;
+  private giftsOther$: Observable<Gifted[]>;
   constructor() {
 
-    this.temp1$ = this.giftsOther$.pipe(
+    this.giftsOther$ = this.giftedListOriginal$.pipe(
+      map(val => shuffle(val) as Gifted[]),
       flatMap(data => data),
       filter(gifted => !gifted.isNgBe),
       scan((_, val, acc) => this.setId(acc, val)),
       reduce(this.concat),
+      map(val => this.setFirstId(val)),
       share()
     )
-    this.temp2$ = this.giftsNgBe$.pipe(
+    this.giftsNgBe$ = this.giftedListOriginal$.pipe(
+      map(val => shuffle(val) as Gifted[]),
       flatMap(data => data),
       filter(gifted => gifted.isNgBe),
-      scan((_, val, acc) => this.setCharId(acc, val)),
+      scan((_, val, acc) => this.setCharId(acc, val, _)),
       reduce(this.concat),
+      map(val => this.setFirstCharId(val)),
       share()
     )
   }
 
   randomize() {
     return this.giftedList$.pipe(
-      combineLatest(this.temp2$),
+      combineLatest(this.giftsOther$),
       map(([rslt1, rslt2]) => [...rslt1, ...rslt2]),
-      combineLatest(this.temp1$),
-      map(([rslt1, rslt2]) => [...rslt1, ...rslt2])
+      combineLatest(this.giftsNgBe$),
+      map(([rslt1, rslt2]) => [...rslt1, ...rslt2]),
+      map(val => shuffle(val))
     )
 
 
 
   }
-  setCharId(id: number, gifted: Gifted) {
-    console.log(id)
+  private setCharId(id: number, gifted: Gifted, test) {
+    console.log(test + gifted)
     return this.setId(charArray[id], gifted)
   }
-  setId(id: any, gift: Gifted) {
-    gift.id = id.toString();
-    return gift;
+  private setId(id: any, gifted: Gifted) {
+    gifted.id = id.toString();
+    return gifted;
+  }
+  setFirstCharId(gifteds: Gifted[]) {
+    gifteds[0].id = charArray[charArray.length];
+    return gifteds
+  }
+  setFirstId(gifteds: Gifted[]) {
+    gifteds[0].id = charArray.length.toString();
+    return gifteds
   }
   private concat(current, next) {
     let temp = current as any;
-    temp = temp.length ? shuffle(temp.concat([next])) : [temp, next];
-    // console.log(temp);
+    temp = temp.length ? temp.concat([next]) : [temp, next];
     return temp;
   }
 }
