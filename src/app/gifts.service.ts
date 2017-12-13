@@ -29,7 +29,7 @@ export class GiftsService {
       reduce(this.concat),
       map(val => this.setFirstId(val)),
       share()
-    )
+    );
     this.giftsNgBe$ = this.giftedListOriginal$.pipe(
       map(val => shuffle(val) as Gifted[]),
       flatMap(data => data),
@@ -38,7 +38,7 @@ export class GiftsService {
       reduce(this.concat),
       map(val => this.setFirstCharId(val)),
       share()
-    )
+    );
   }
 
   randomize() {
@@ -48,14 +48,14 @@ export class GiftsService {
       combineLatest(this.giftsNgBe$),
       map(([rslt1, rslt2]) => [...rslt1, ...rslt2]),
       map(val => shuffle(val))
-    )
+    );
 
 
 
   }
   private setCharId(id: number, gifted: Gifted, test) {
-    console.log(test + gifted)
-    return this.setId(charArray[id], gifted)
+    console.log(test + gifted);
+    return this.setId(charArray[id], gifted);
   }
   private setId(id: any, gifted: Gifted) {
     gifted.id = id.toString();
@@ -63,11 +63,11 @@ export class GiftsService {
   }
   private setFirstCharId(gifteds: Gifted[]) {
     gifteds[0].id = 'E';
-    return gifteds
+    return gifteds;
   }
   private setFirstId(gifteds: Gifted[]) {
     gifteds[0].id = (24).toString();
-    return gifteds
+    return gifteds;
   }
   private concat(current, next) {
     let temp = current as any;

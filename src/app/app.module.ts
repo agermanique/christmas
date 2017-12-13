@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { GiftsService } from './gifts.service';
 
 import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,9 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [GiftsService],
   bootstrap: [AppComponent]
